@@ -1,4 +1,4 @@
 package dev.joshlessard.portfolio.domain;
 
-public record Portfolio() {
+public record Portfolio( PortfolioType type ) {
 }

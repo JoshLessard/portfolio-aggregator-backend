@@ -1,6 +1,6 @@
 package dev.joshlessard.portfolio.domain;
 
-import static java.util.Collections.emptyList;
+import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ public class StubPortfolioService implements PortfolioService {
         portfolios.clear();
     }
 
-    public void addPortfolio( Portfolio portfolio ) {
-        portfolios.add( portfolio );
+    public void addPortfolios( Portfolio... portfolios ) {
+        this.portfolios.addAll( asList( portfolios ) );
     }
 
     @Override

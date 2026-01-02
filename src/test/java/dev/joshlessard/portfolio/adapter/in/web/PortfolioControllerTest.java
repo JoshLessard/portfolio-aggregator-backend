@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import dev.joshlessard.portfolio.domain.Portfolio;
+import dev.joshlessard.portfolio.domain.PortfolioType;
 import dev.joshlessard.portfolio.domain.StubPortfolioService;
 
 public class PortfolioControllerTest {
@@ -23,14 +24,42 @@ public class PortfolioControllerTest {
     }
 
     @Test
-    public void whenOneEmptyPortfolioThenGetPortfoliosResponseContainsDtoRepresentingThatPortfolio() {
-        portfolioService.addPortfolio( new Portfolio() );
+    public void whenOneEmptyRrspPortfolioThenGetPortfoliosResponseContainsDtoRepresentingThatPortfolio() {
+        portfolioService.addPortfolios( new Portfolio( PortfolioType.RRSP ) );
 
         GetPortfoliosResponse response = controller.getPortfolios();
 
         assertThat( response.portfolios() )
             .containsExactly(
-                new PortfolioDto()
+                new PortfolioDto( "rrsp" )
+            );
+    }
+
+    @Test
+    public void whenOneEmptyTfsaPortfolioThenGetPortfoliosResponseContainsDtoRepresentingThatPortfolio() {
+        portfolioService.addPortfolios( new Portfolio( PortfolioType.TFSA ) );
+
+        GetPortfoliosResponse response = controller.getPortfolios();
+
+        assertThat( response.portfolios() )
+            .containsExactly(
+                new PortfolioDto( "tfsa" )
+            );
+    }
+
+    @Test
+    public void whenOneEmptyRrspAndOneEmptyTfsaPortfolioThenGetPortfoliosResponseContainsDtoRepresentingBothPortfolios() {
+        portfolioService.addPortfolios(
+            new Portfolio( PortfolioType.RRSP ),
+            new Portfolio( PortfolioType.TFSA )
+        );
+
+        GetPortfoliosResponse response = controller.getPortfolios();
+
+        assertThat( response.portfolios() )
+            .containsExactlyInAnyOrder(
+                new PortfolioDto( "rrsp" ),
+                new PortfolioDto( "tfsa" )
             );
     }
 }
