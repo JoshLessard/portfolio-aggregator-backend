@@ -116,4 +116,94 @@ public class PortfolioControllerTest {
                 )
             );
     }
+
+    @Test
+    public void whenOneTfsaPortfolioWithOnePositionThenGetPortfoliosResponseContainsDtoRepresentingThatPortfolio() {
+        portfolioService.addPortfolios(
+            new Portfolio(
+                PortfolioType.TFSA,
+                List.of(
+                    new Position( "ZAG", 843.587 )
+                )
+            )
+        );
+
+        GetPortfoliosResponse response = controller.getPortfolios();
+
+        assertThat( response.portfolios() )
+            .containsExactly(
+                new PortfolioDto(
+                    "tfsa",
+                    List.of(
+                        new PositionDto( "ZAG", 843.587 )
+                    )
+                )
+            );
+    }
+
+    @Test
+    public void whenOneTfsaPortfolioWithTwoPositionsThenGetPortfolioResponseContainsDtoRepresentingThatPortfolio() {
+        portfolioService.addPortfolios(
+            new Portfolio(
+                PortfolioType.TFSA,
+                List.of(
+                    new Position( "VGRO", 694 ),
+                    new Position( "XBAL", 37815 )
+                )
+            )
+        );
+
+        GetPortfoliosResponse response = controller.getPortfolios();
+
+        assertThat( response.portfolios() )
+            .containsExactly(
+                new PortfolioDto(
+                    "tfsa",
+                    List.of(
+                        new PositionDto( "VGRO", 694 ),
+                        new PositionDto( "XBAL", 37815 )
+                    )
+                )
+            );
+    }
+
+    @Test
+    public void whenOneRrspPortfolioAndOneTfsaPortfolioWithTwoPositionsEachThenGetPortfoliosResponseContainsDtoReprsentingBothPortfolios() {
+        portfolioService.addPortfolios(
+            new Portfolio(
+                PortfolioType.RRSP,
+                List.of(
+                    new Position( "MSFT", 3981 ),
+                    new Position( "RY", 1487.312 )
+                )
+            ),
+            new Portfolio(
+                PortfolioType.TFSA,
+                List.of(
+                    new Position( "MMM", 8574 ),
+                    new Position( "FTS", 16.913 )
+                )
+            )
+        );
+
+        GetPortfoliosResponse response = controller.getPortfolios();
+
+        assertThat( response.portfolios() )
+            .containsExactlyInAnyOrder(
+                new PortfolioDto(
+                    "rrsp",
+                    List.of(
+                        new PositionDto( "MSFT", 3981 ),
+                        new PositionDto( "RY", 1487.312 )
+                    )
+                ),
+                new PortfolioDto(
+                    "tfsa",
+                    List.of(
+                        new PositionDto( "MMM", 8574 ),
+                        new PositionDto( "FTS", 16.913 )
+                    )
+                )
+            );
+    }
 }
