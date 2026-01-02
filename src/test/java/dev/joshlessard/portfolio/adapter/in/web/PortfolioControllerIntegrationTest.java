@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
+
+import dev.joshlessard.portfolio.domain.PortfolioService;
 
 @Tag( "integration" )
 @WebMvcTest( PortfolioController.class )
@@ -15,6 +18,9 @@ public class PortfolioControllerIntegrationTest {
 
     @Autowired
     private RestTestClient client;
+
+    @MockitoBean
+    private PortfolioService portfolioService;
 
     @Test
     public void getPortfoliosReturns200() {
