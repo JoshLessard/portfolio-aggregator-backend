@@ -1,3 +1,5 @@
 spring:
   application:
     name: portfolio-aggregator-backend
+  profiles:
+    active: testdata
