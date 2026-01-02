@@ -1,15 +1,23 @@
 package dev.joshlessard.portfolio.adapter.in.web;
 
-import dev.joshlessard.portfolio.domain.Portfolio;
+import java.util.List;
 
-public record PortfolioDto(String type) {
+import dev.joshlessard.portfolio.domain.Portfolio;
+import dev.joshlessard.portfolio.domain.PortfolioType;
+
+public record PortfolioDto( String type, List<PositionDto> positions ) {
 
     public static PortfolioDto from( Portfolio portfolio ) {
-        return new PortfolioDto( getType( portfolio ) );
+        String type = serialize( portfolio.type() );
+        List<PositionDto> positions = portfolio.positions()
+            .stream()
+            .map( PositionDto::from )
+            .toList();
+        return new PortfolioDto( type, positions );
     }
 
-    private static String getType( Portfolio portfolio ) {
-        return switch( portfolio.type() ) {
+    private static String serialize( PortfolioType type ) {
+        return switch( type ) {
             case RRSP -> "rrsp";
             case TFSA -> "tfsa";
         };
