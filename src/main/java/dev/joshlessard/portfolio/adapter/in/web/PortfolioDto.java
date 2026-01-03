@@ -5,9 +5,9 @@ import java.util.List;
 import dev.joshlessard.portfolio.domain.Portfolio;
 import dev.joshlessard.portfolio.domain.PortfolioType;
 
-public record PortfolioDto( String type, List<PositionDto> positions ) {
+record PortfolioDto( String type, List<PositionDto> positions ) {
 
-    public static PortfolioDto from( Portfolio portfolio ) {
+    static PortfolioDto from( Portfolio portfolio ) {
         String type = serialize( portfolio.type() );
         List<PositionDto> positions = portfolio.positions()
             .stream()
@@ -20,6 +20,7 @@ public record PortfolioDto( String type, List<PositionDto> positions ) {
         return switch( type ) {
             case RRSP -> "rrsp";
             case TFSA -> "tfsa";
+            case UNKNOWN -> "unknown";
         };
     }
 }
