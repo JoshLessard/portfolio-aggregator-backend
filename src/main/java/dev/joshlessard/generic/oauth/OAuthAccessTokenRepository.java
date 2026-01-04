@@ -1,6 +1,8 @@
 package dev.joshlessard.generic.oauth;
 
+import java.util.Optional;
+
 public interface OAuthAccessTokenRepository {
 
-    OAuthAccessToken getToken();
+    Optional<OAuthAccessToken> getToken();
 }

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 import dev.joshlessard.generic.oauth.OAuthAccessTokenRepository;
+import dev.joshlessard.generic.oauth.OAuthAccessTokenService;
 import dev.joshlessard.portfolio.domain.PortfolioService;
 import dev.joshlessard.portfolio.domain.questrade.QuestradePortfolioRetriever;
 import dev.joshlessard.portfolio.domain.questrade.QuestradePortfolioService;
@@ -13,8 +14,13 @@ import dev.joshlessard.portfolio.domain.questrade.QuestradePortfolioService;
 public class PortfolioAggregatorBackendConfiguration {
 
     @Bean
-    public PortfolioService portfolioService( OAuthAccessTokenRepository accessTokenRepository, QuestradePortfolioRetriever portfolioRetriever ) {
-        return new QuestradePortfolioService( accessTokenRepository, portfolioRetriever );
+    public OAuthAccessTokenService accessTokenService( OAuthAccessTokenRepository accessTokenRepository ) {
+        return new OAuthAccessTokenService( accessTokenRepository );
+    }
+
+    @Bean
+    public PortfolioService portfolioService( OAuthAccessTokenService accessTokenService, QuestradePortfolioRetriever portfolioRetriever ) {
+        return new QuestradePortfolioService( accessTokenService, portfolioRetriever );
     }
 
     @Bean

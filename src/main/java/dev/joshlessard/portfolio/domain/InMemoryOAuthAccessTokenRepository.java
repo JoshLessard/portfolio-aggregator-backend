@@ -1,5 +1,7 @@
 package dev.joshlessard.portfolio.domain;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
@@ -16,7 +18,7 @@ public class InMemoryOAuthAccessTokenRepository implements OAuthAccessTokenRepos
     }
 
     @Override
-    public OAuthAccessToken getToken() {
-        return accessToken;
+    public Optional<OAuthAccessToken> getToken() {
+        return Optional.ofNullable( accessToken );
     }
 }

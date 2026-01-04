@@ -11,8 +11,11 @@ public class StubOAuthAccessTokenRepository implements OAuthAccessTokenRepositor
     }
 
     @Override
-    public OAuthAccessToken getToken() {
-        return Optional.ofNullable( accessToken )
-            .orElseThrow( () -> new IllegalStateException( "accessToken has not been configured" ) );
+    public Optional<OAuthAccessToken> getToken() {
+        return Optional.ofNullable( accessToken );
+    }
+
+    public void clearTokens() {
+        accessToken = null;
     }
 }
