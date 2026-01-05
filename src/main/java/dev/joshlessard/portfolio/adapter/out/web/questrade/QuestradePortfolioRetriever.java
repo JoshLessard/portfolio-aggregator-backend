@@ -60,6 +60,7 @@ public class QuestradePortfolioRetriever implements PortfolioRetriever {
         return portfolios;
     }
 
+    // TODO Don't like how deserialization is done here, but serialization is done in PortfolioDto (mismatch?)
     private PortfolioType toPortfolioType( String type ) {
         return switch( type.toLowerCase() ) {
             case "rrsp" -> PortfolioType.RRSP;
