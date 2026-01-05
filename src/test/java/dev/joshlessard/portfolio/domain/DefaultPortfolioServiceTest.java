@@ -1,4 +1,4 @@
-package dev.joshlessard.portfolio.domain.questrade;
+package dev.joshlessard.portfolio.domain;
 
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,16 +10,18 @@ import org.junit.jupiter.api.Test;
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
 import dev.joshlessard.generic.oauth.OAuthAccessTokenService;
 import dev.joshlessard.generic.oauth.StubOAuthAccessTokenRepository;
+import dev.joshlessard.portfolio.domain.DefaultPortfolioService;
 import dev.joshlessard.portfolio.domain.Portfolio;
 import dev.joshlessard.portfolio.domain.PortfolioType;
 import dev.joshlessard.portfolio.domain.Position;
+import dev.joshlessard.portfolio.domain.questrade.StubQuestradePortfolioRetriever;
 
-public class QuestradePortfolioServiceTest {
+public class DefaultPortfolioServiceTest {
 
     private final StubOAuthAccessTokenRepository accessTokenRepository = new StubOAuthAccessTokenRepository();
     private final OAuthAccessTokenService accessTokenService = new OAuthAccessTokenService( accessTokenRepository );
     private final StubQuestradePortfolioRetriever portfolioRetriever = new StubQuestradePortfolioRetriever();
-    private final QuestradePortfolioService portfolioService = new QuestradePortfolioService( accessTokenService, portfolioRetriever );
+    private final DefaultPortfolioService portfolioService = new DefaultPortfolioService( accessTokenService, portfolioRetriever );
 
     @Test
     public void accessTokenIsRetrievedFromOAuthServiceAndUsedToGetPortfoliosFromRetriever() {
