@@ -15,16 +15,16 @@ import dev.joshlessard.generic.oauth.OAuthAccessToken;
 import dev.joshlessard.portfolio.domain.Portfolio;
 import dev.joshlessard.portfolio.domain.PortfolioType;
 import dev.joshlessard.portfolio.domain.Position;
-import dev.joshlessard.portfolio.domain.questrade.QuestradePortfolioRetriever;
+import dev.joshlessard.portfolio.domain.PortfolioRetriever;
 
 // TODO Handle invalid token (e.g., if it is rejected by any APIs)
 @Component
-public class RestQuestradePortfolioRetriever implements QuestradePortfolioRetriever {
+public class QuestradePortfolioRetriever implements PortfolioRetriever {
 
     private final RestClient restClient;
 
     @Autowired
-    public RestQuestradePortfolioRetriever( RestClient restClient ) {
+    public QuestradePortfolioRetriever( RestClient restClient ) {
         this.restClient = restClient;
     }
 

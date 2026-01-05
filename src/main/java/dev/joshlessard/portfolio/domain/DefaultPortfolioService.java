@@ -4,14 +4,13 @@ import java.util.List;
 
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
 import dev.joshlessard.generic.oauth.OAuthAccessTokenService;
-import dev.joshlessard.portfolio.domain.questrade.QuestradePortfolioRetriever;
 
 public class DefaultPortfolioService implements PortfolioService {
 
     private final OAuthAccessTokenService accessTokenService;
-    private final QuestradePortfolioRetriever portfolioRetriever;
+    private final PortfolioRetriever portfolioRetriever;
 
-    public DefaultPortfolioService( OAuthAccessTokenService accessTokenService, QuestradePortfolioRetriever portfolioRetriever ) {
+    public DefaultPortfolioService( OAuthAccessTokenService accessTokenService, PortfolioRetriever portfolioRetriever ) {
         this.accessTokenService = accessTokenService;
         this.portfolioRetriever = portfolioRetriever;
     }

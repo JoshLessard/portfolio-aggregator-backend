@@ -1,12 +1,11 @@
-package dev.joshlessard.portfolio.domain.questrade;
+package dev.joshlessard.portfolio.domain;
 
 import java.util.List;
 
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
-import dev.joshlessard.portfolio.domain.Portfolio;
 
 // TODO Port package?
-public interface QuestradePortfolioRetriever {
+public interface PortfolioRetriever {
 
     List<Portfolio> retrievePortfolios( OAuthAccessToken accessToken );
 }

@@ -1,4 +1,4 @@
-package dev.joshlessard.portfolio.domain.questrade;
+package dev.joshlessard.portfolio.domain;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,9 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
-import dev.joshlessard.portfolio.domain.Portfolio;
 
-public class StubQuestradePortfolioRetriever implements QuestradePortfolioRetriever {
+public class StubPortfolioRetriever implements PortfolioRetriever {
 
     private final Map<OAuthAccessToken, List<Portfolio>> portfoliosByAccessToken = new HashMap<>();
 

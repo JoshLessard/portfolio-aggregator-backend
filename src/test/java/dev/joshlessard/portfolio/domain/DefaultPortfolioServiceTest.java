@@ -10,17 +10,12 @@ import org.junit.jupiter.api.Test;
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
 import dev.joshlessard.generic.oauth.OAuthAccessTokenService;
 import dev.joshlessard.generic.oauth.StubOAuthAccessTokenRepository;
-import dev.joshlessard.portfolio.domain.DefaultPortfolioService;
-import dev.joshlessard.portfolio.domain.Portfolio;
-import dev.joshlessard.portfolio.domain.PortfolioType;
-import dev.joshlessard.portfolio.domain.Position;
-import dev.joshlessard.portfolio.domain.questrade.StubQuestradePortfolioRetriever;
 
 public class DefaultPortfolioServiceTest {
 
     private final StubOAuthAccessTokenRepository accessTokenRepository = new StubOAuthAccessTokenRepository();
     private final OAuthAccessTokenService accessTokenService = new OAuthAccessTokenService( accessTokenRepository );
-    private final StubQuestradePortfolioRetriever portfolioRetriever = new StubQuestradePortfolioRetriever();
+    private final StubPortfolioRetriever portfolioRetriever = new StubPortfolioRetriever();
     private final DefaultPortfolioService portfolioService = new DefaultPortfolioService( accessTokenService, portfolioRetriever );
 
     @Test
