@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import dev.joshlessard.generic.oauth.OAuthAccessToken;
 import dev.joshlessard.generic.oauth.OAuthAccessTokenRepository;
 
+// TODO Move me to oauth package
 // TODO Get rid of me (and disable "testdata" profile)
 @Component
 @Profile( "testdata" )
