@@ -1,6 +1,6 @@
 package dev.joshlessard.generic.oauth.domain;
 
-interface OAuthTokenRefresher {
+interface OAuthAccessTokenRefresher {
 
     OAuthAccessToken refresh( OAuthAccessToken accessToken );
 }

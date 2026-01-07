@@ -8,13 +8,13 @@ public class DefaultOAuthAccessTokenService implements OAuthAccessTokenService {
 
     private final Clock clock;
     private final OAuthAccessTokenRepository accessTokenRepository;
-    private final OAuthTokenRefresher tokenRefresher;
+    private final OAuthAccessTokenRefresher tokenRefresher;
     private final int refreshLookaheadInSeconds;
 
     public DefaultOAuthAccessTokenService(
         Clock clock,
         OAuthAccessTokenRepository accessTokenRepository,
-        OAuthTokenRefresher tokenRefresher,
+        OAuthAccessTokenRefresher tokenRefresher,
         int refreshLookaheadInSeconds
     ) {
         this.clock = clock;

@@ -16,7 +16,7 @@ public class DefaultOAuthAccessTokenServiceTest {
 
     private final Clock clock = Clock.fixed( Instant.now(), ZoneId.systemDefault() );
     private final StubOAuthAccessTokenRepository accessTokenRepository = new StubOAuthAccessTokenRepository();
-    private final StubOAuthTokenRefresher tokenRefresher = new StubOAuthTokenRefresher();
+    private final StubOAuthAccessTokenRefresher tokenRefresher = new StubOAuthAccessTokenRefresher();
     private final DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService( clock, accessTokenRepository, tokenRefresher, 0 );
 
     @Test

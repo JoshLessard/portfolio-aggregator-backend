@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class StubOAuthTokenRefresher implements OAuthTokenRefresher {
+public class StubOAuthAccessTokenRefresher implements OAuthAccessTokenRefresher {
 
     private final Map<OAuthAccessToken, OAuthAccessToken> refreshTokensByExpiredToken = new HashMap<>();
 
