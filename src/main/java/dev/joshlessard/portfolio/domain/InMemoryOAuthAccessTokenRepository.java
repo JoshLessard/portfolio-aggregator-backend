@@ -14,12 +14,13 @@ public class InMemoryOAuthAccessTokenRepository implements OAuthAccessTokenRepos
 
     private OAuthAccessToken accessToken;
 
-    public void setToken( OAuthAccessToken accessToken ) {
-        this.accessToken = accessToken;
-    }
-
     @Override
     public Optional<OAuthAccessToken> getToken() {
         return Optional.ofNullable( accessToken );
+    }
+
+    @Override
+    public void setToken( OAuthAccessToken accessToken ) {
+        this.accessToken = accessToken;
     }
 }

@@ -30,7 +30,8 @@ public class DefaultOAuthAccessTokenService implements OAuthAccessTokenService {
         Instant expiryCutoff = clock.instant().plus(refreshLookaheadInSeconds, ChronoUnit.SECONDS );
         if ( accessToken.isExpired( expiryCutoff ) ) {
             // TODO This refresh can fail...test
-            return tokenRefresher.refresh( accessToken );
+            accessToken = tokenRefresher.refresh( accessToken );
+            accessTokenRepository.setToken( accessToken );
         }
         return accessToken;
     }

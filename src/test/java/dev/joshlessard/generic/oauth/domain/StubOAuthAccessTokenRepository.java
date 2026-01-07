@@ -6,13 +6,14 @@ public class StubOAuthAccessTokenRepository implements OAuthAccessTokenRepositor
 
     private OAuthAccessToken accessToken;
 
-    public void setToken( OAuthAccessToken accessToken ) {
-        this.accessToken = accessToken;
-    }
-
     @Override
     public Optional<OAuthAccessToken> getToken() {
         return Optional.ofNullable( accessToken );
+    }
+
+    @Override
+    public void setToken( OAuthAccessToken accessToken ) {
+        this.accessToken = accessToken;
     }
 
     public void clearTokens() {

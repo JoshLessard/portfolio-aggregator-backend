@@ -6,4 +6,5 @@ import java.util.Optional;
 public interface OAuthAccessTokenRepository {
 
     Optional<OAuthAccessToken> getToken();
+    void setToken( OAuthAccessToken token );
 }
