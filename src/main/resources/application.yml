@@ -7,3 +7,5 @@ oauth:
   access-token:
     refresh:
       lookahead-in-seconds: 5
+      uri:
+        questrade: https://login.questrade.com/oauth2/token

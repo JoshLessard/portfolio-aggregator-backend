@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import dev.joshlessard.generic.oauth.domain.DefaultOAuthAccessTokenService;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenRefresher;
 import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenRepository;
 import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenService;
 
@@ -18,11 +19,16 @@ public class OAuthConfiguration {
     }
 
     @Bean
-    public OAuthAccessTokenService accessTokenService( Clock clock, OAuthAccessTokenRepository accessTokenRepository, OAuthProperties properties ) {
+    public OAuthAccessTokenService accessTokenService(
+        Clock clock,
+        OAuthAccessTokenRepository accessTokenRepository,
+        OAuthAccessTokenRefresher tokenRefresher,
+        OAuthProperties properties
+    ) {
         return new DefaultOAuthAccessTokenService(
             clock,
             accessTokenRepository,
-            null, // TODO Fix me
+            tokenRefresher,
             properties.getAccessToken().getRefresh().getLookaheadInSeconds()
         );
     }
