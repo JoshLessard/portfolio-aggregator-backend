@@ -3,3 +3,7 @@ spring:
     name: portfolio-aggregator-backend
   profiles:
     active: testdata
+oauth:
+  access-token:
+    refresh:
+      lookahead-in-seconds: 5

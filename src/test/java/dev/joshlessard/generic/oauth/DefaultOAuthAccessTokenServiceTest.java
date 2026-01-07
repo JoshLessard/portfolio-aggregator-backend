@@ -17,24 +17,7 @@ public class DefaultOAuthAccessTokenServiceTest {
     private final Clock clock = Clock.fixed( Instant.now(), ZoneId.systemDefault() );
     private final StubOAuthAccessTokenRepository accessTokenRepository = new StubOAuthAccessTokenRepository();
     private final StubOAuthTokenRefresher tokenRefresher = new StubOAuthTokenRefresher();
-    private final DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService( clock, accessTokenRepository, tokenRefresher );
-
-    @Test
-    public void retrievingTokenDelegatesToRepository() {
-        OAuthAccessToken expectedAccessToken = new OAuthAccessToken(
-            "wickedAccessToken",
-            "coolTokenType",
-            Instant.now(),
-            "excellentRefreshToken",
-            emptyMap()
-        );
-        accessTokenRepository.setToken( expectedAccessToken );
-
-        OAuthAccessToken actualAccessToken = service.getToken();
-
-        assertThat( actualAccessToken )
-            .isSameAs( expectedAccessToken );
-    }
+    private final DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService( clock, accessTokenRepository, tokenRefresher, 0 );
 
     @Test
     public void retrievingNonexistentTokenThrowsException() {
@@ -45,16 +28,21 @@ public class DefaultOAuthAccessTokenServiceTest {
     }
 
     @Test
-    public void retrievingTokenThatExpiredInThePastRefreshesTokenBeforeReturningIt() {
-        OAuthAccessToken expiredToken = expiredAccessToken( 1, ChronoUnit.SECONDS );
+    public void whenTokenExpiresInTheFutureThenTokenIsReturned() {
+        OAuthAccessToken expectedAccessToken = accessTokenExpiringIn( 1, ChronoUnit.NANOS );
+        accessTokenRepository.setToken( expectedAccessToken );
+
+        OAuthAccessToken actualAccessToken = service.getToken();
+
+        assertThat( actualAccessToken )
+            .isSameAs( expectedAccessToken );
+    }
+
+    @Test
+    public void whenTokenExpiresNowThenItIsRefreshed() {
+        OAuthAccessToken expiredToken = expiredAccessToken( 0, ChronoUnit.NANOS );
         accessTokenRepository.setToken( expiredToken );
-        OAuthAccessToken refreshedToken = new OAuthAccessToken(
-            "refreshedAccessToken",
-            "refreshed",
-            clock.instant().plus( 3600, ChronoUnit.SECONDS ),
-            "anotherRefreshToken",
-            emptyMap()
-        );
+        OAuthAccessToken refreshedToken = nonexpiredAccessToken();
         tokenRefresher
             .setRefreshToken( refreshedToken )
             .forExpiredToken( expiredToken );
@@ -63,6 +51,83 @@ public class DefaultOAuthAccessTokenServiceTest {
 
         assertThat( actualAccessToken )
             .isSameAs( refreshedToken );
+    }
+
+    @Test
+    public void whenTokenExpiredInThePastThenItIsRefreshed() {
+        OAuthAccessToken expiredToken = expiredAccessToken( 1, ChronoUnit.NANOS );
+        accessTokenRepository.setToken( expiredToken );
+        OAuthAccessToken refreshedToken = nonexpiredAccessToken();
+        tokenRefresher
+            .setRefreshToken( refreshedToken )
+            .forExpiredToken( expiredToken );
+
+        OAuthAccessToken actualAccessToken = service.getToken();
+
+        assertThat( actualAccessToken )
+            .isSameAs( refreshedToken );
+    }
+
+    @Test
+    public void whenTokenExpiresAfterRefreshLookaheadThenItIsReturned() {
+        OAuthAccessToken tokenExpiringAfterLookahead = accessTokenExpiringIn( 10, ChronoUnit.SECONDS );
+        accessTokenRepository.setToken( tokenExpiringAfterLookahead );
+        DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService(
+            clock, accessTokenRepository, tokenRefresher,
+            9
+        );
+    }
+
+    @Test
+    public void whenTokenExpiresAtRefreshLookaheadThenItIsRefreshed() {
+        OAuthAccessToken tokenExpiringAtLookahead = accessTokenExpiringIn( 5, ChronoUnit.SECONDS );
+        accessTokenRepository.setToken( tokenExpiringAtLookahead );
+        OAuthAccessToken refreshedToken = nonexpiredAccessToken();
+        tokenRefresher
+            .setRefreshToken( refreshedToken )
+            .forExpiredToken( tokenExpiringAtLookahead );
+        DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService(
+            clock, accessTokenRepository, tokenRefresher,
+            5
+        );
+
+        OAuthAccessToken actualAccessToken = service.getToken();
+
+        assertThat( actualAccessToken )
+            .isSameAs( refreshedToken );
+    }
+
+    @Test
+    public void whenTokenExpiresBeforeRefreshLookaheadThenItIsRefreshed() {
+        OAuthAccessToken tokenExpiringBeforeLookahead = accessTokenExpiringIn( 7, ChronoUnit.SECONDS );
+        accessTokenRepository.setToken( tokenExpiringBeforeLookahead );
+        OAuthAccessToken refreshedToken = nonexpiredAccessToken();
+        tokenRefresher
+            .setRefreshToken( refreshedToken )
+            .forExpiredToken( tokenExpiringBeforeLookahead );
+        DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService(
+            clock, accessTokenRepository, tokenRefresher,
+            8
+        );
+
+        OAuthAccessToken actualAccessToken = service.getToken();
+
+        assertThat( actualAccessToken )
+            .isSameAs( refreshedToken );
+    }
+
+    private OAuthAccessToken nonexpiredAccessToken() {
+        return accessTokenExpiringIn( 3600, ChronoUnit.SECONDS );
+    }
+
+    private OAuthAccessToken accessTokenExpiringIn( long amountInTheFuture, TemporalUnit unit ) {
+        return new OAuthAccessToken(
+            "nonexpiredAccessToken",
+            "nonexpired",
+            clock.instant().plus( amountInTheFuture, unit ),
+            "excellentRefreshToken",
+            emptyMap()
+        );
     }
 
     private OAuthAccessToken expiredAccessToken( long amountInThePast, TemporalUnit unit ) {
@@ -73,26 +138,5 @@ public class DefaultOAuthAccessTokenServiceTest {
             "refreshToken",
             emptyMap()
         );
-    }
-
-    @Test
-    public void retrievingTokenThatExpiresNowRefreshesTokenBeforeReturningIt() {
-        OAuthAccessToken expiredToken = expiredAccessToken( 0, ChronoUnit.MILLIS );
-        accessTokenRepository.setToken( expiredToken );
-        OAuthAccessToken refreshedToken = new OAuthAccessToken(
-            "refreshedAccessToken",
-            "refreshed",
-            clock.instant().plus( 3600, ChronoUnit.SECONDS ),
-            "anotherRefreshToken",
-            emptyMap()
-        );
-        tokenRefresher
-            .setRefreshToken( refreshedToken )
-            .forExpiredToken( expiredToken );
-
-        OAuthAccessToken actualAccessToken = service.getToken();
-
-        assertThat( actualAccessToken )
-            .isSameAs( refreshedToken );
     }
 }

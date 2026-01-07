@@ -15,7 +15,12 @@ public class OAuthConfiguration {
     }
 
     @Bean
-    public OAuthAccessTokenService accessTokenService( Clock clock, OAuthAccessTokenRepository accessTokenRepository ) {
-        return new DefaultOAuthAccessTokenService( clock, accessTokenRepository, null ); // TODO Fix me
+    public OAuthAccessTokenService accessTokenService( Clock clock, OAuthAccessTokenRepository accessTokenRepository, OAuthProperties properties ) {
+        return new DefaultOAuthAccessTokenService(
+            clock,
+            accessTokenRepository,
+            null, // TODO Fix me
+            properties.getAccessToken().getRefresh().getLookaheadInSeconds()
+        );
     }
 }
