@@ -1,4 +1,4 @@
-package dev.joshlessard.generic.oauth;
+package dev.joshlessard.generic.oauth.domain;
 
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;

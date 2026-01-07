@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
 import dev.joshlessard.portfolio.domain.Portfolio;
 import dev.joshlessard.portfolio.domain.PortfolioType;
 import dev.joshlessard.portfolio.domain.Position;

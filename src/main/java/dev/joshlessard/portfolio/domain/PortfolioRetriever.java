@@ -2,7 +2,7 @@ package dev.joshlessard.portfolio.domain;
 
 import java.util.List;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
 
 // TODO Port package?
 public interface PortfolioRetriever {

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
-import dev.joshlessard.generic.oauth.OAuthAccessTokenService;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenService;
 import dev.joshlessard.portfolio.domain.DefaultPortfolioService;
 import dev.joshlessard.portfolio.domain.PortfolioRetriever;
 import dev.joshlessard.portfolio.domain.PortfolioService;

@@ -2,8 +2,8 @@ package dev.joshlessard.portfolio.domain;
 
 import java.util.List;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
-import dev.joshlessard.generic.oauth.OAuthAccessTokenService;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenService;
 
 public class DefaultPortfolioService implements PortfolioService {
 

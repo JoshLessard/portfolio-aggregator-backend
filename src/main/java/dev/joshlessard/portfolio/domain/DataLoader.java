@@ -1,16 +1,12 @@
 package dev.joshlessard.portfolio.domain;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
-import dev.joshlessard.generic.oauth.OAuthAccessTokenRepository;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenRepository;
 
 // TODO Move me to oauth package
 // TODO Get rid of me (and disable "testdata" profile)

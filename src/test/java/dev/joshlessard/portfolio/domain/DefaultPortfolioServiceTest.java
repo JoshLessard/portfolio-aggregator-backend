@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
-import dev.joshlessard.generic.oauth.StubOAuthAccessTokenService;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
+import dev.joshlessard.generic.oauth.domain.StubOAuthAccessTokenService;
 
 public class DefaultPortfolioServiceTest {
 

@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
-import dev.joshlessard.generic.oauth.OAuthAccessTokenRepository;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenRepository;
 
 // TODO Move me to oauth package
 // TODO Get rid of me

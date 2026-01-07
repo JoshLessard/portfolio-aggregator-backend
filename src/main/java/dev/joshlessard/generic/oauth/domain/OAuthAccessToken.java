@@ -1,4 +1,4 @@
-package dev.joshlessard.generic.oauth;
+package dev.joshlessard.generic.oauth.domain;
 
 import java.time.Instant;
 import java.util.Map;

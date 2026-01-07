@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import dev.joshlessard.generic.oauth.OAuthAccessToken;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
 
 public class StubPortfolioRetriever implements PortfolioRetriever {
 

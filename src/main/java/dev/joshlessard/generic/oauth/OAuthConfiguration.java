@@ -5,7 +5,10 @@ import java.time.Clock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// TODO Move non-Spring classes to "domain" subpackage
+import dev.joshlessard.generic.oauth.domain.DefaultOAuthAccessTokenService;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenRepository;
+import dev.joshlessard.generic.oauth.domain.OAuthAccessTokenService;
+
 @Configuration
 public class OAuthConfiguration {
 

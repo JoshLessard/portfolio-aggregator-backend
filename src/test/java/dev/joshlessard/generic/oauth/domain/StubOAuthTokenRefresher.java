@@ -1,4 +1,4 @@
-package dev.joshlessard.generic.oauth;
+package dev.joshlessard.generic.oauth.domain;
 
 import java.util.HashMap;
 import java.util.Map;
