@@ -27,12 +27,24 @@ public class DefaultOAuthAccessTokenService implements OAuthAccessTokenService {
     public OAuthAccessToken getToken() {
         OAuthAccessToken accessToken = accessTokenRepository.getToken()
             .orElseThrow( NoSuchAccessTokenException::new );
-        Instant expiryCutoff = clock.instant().plus(refreshLookaheadInSeconds, ChronoUnit.SECONDS );
+        Instant expiryCutoff = clock.instant().plus( refreshLookaheadInSeconds, ChronoUnit.SECONDS );
         if ( accessToken.isExpired( expiryCutoff ) ) {
-            // TODO This refresh can fail...test
-            accessToken = tokenRefresher.refresh( accessToken );
-            accessTokenRepository.setToken( accessToken );
+            accessToken = refreshAndReplace( accessToken );
         }
+        return accessToken;
+    }
+
+    @Override
+    public OAuthAccessToken refreshToken() {
+        OAuthAccessToken accessToken = accessTokenRepository.getToken()
+            .orElseThrow( NoSuchAccessTokenException::new );
+        return refreshAndReplace( accessToken );
+    }
+
+    private OAuthAccessToken refreshAndReplace( OAuthAccessToken accessToken ) {
+        // TODO This refresh can fail...test and handle
+        accessToken = tokenRefresher.refresh( accessToken );
+        accessTokenRepository.setToken( accessToken );
         return accessToken;
     }
 }

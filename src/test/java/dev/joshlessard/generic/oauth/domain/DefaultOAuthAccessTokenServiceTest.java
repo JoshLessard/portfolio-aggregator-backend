@@ -45,7 +45,7 @@ public class DefaultOAuthAccessTokenServiceTest {
         OAuthAccessToken refreshedToken = nonexpiredAccessToken();
         tokenRefresher
             .setRefreshToken( refreshedToken )
-            .forExpiredToken( expiredToken );
+            .forGivenToken( expiredToken );
 
         OAuthAccessToken actualAccessToken = service.getToken();
 
@@ -53,6 +53,7 @@ public class DefaultOAuthAccessTokenServiceTest {
             .isSameAs( refreshedToken );
         assertThat( accessTokenRepository.getToken() )
             .containsSame( refreshedToken );
+        // TODO Make sure old token is no longer in repository
     }
 
     @Test
@@ -62,7 +63,7 @@ public class DefaultOAuthAccessTokenServiceTest {
         OAuthAccessToken refreshedToken = nonexpiredAccessToken();
         tokenRefresher
             .setRefreshToken( refreshedToken )
-            .forExpiredToken( expiredToken );
+            .forGivenToken( expiredToken );
 
         OAuthAccessToken actualAccessToken = service.getToken();
 
@@ -70,16 +71,22 @@ public class DefaultOAuthAccessTokenServiceTest {
             .isSameAs( refreshedToken );
         assertThat( accessTokenRepository.getToken() )
             .containsSame( refreshedToken );
+        // TODO Make sure old token is no longer in repository
     }
 
     @Test
     public void whenTokenExpiresAfterRefreshLookaheadThenItIsReturned() {
-        OAuthAccessToken tokenExpiringAfterLookahead = accessTokenExpiringIn( 10, ChronoUnit.SECONDS );
-        accessTokenRepository.setToken( tokenExpiringAfterLookahead );
+        OAuthAccessToken expectedAccessToken = accessTokenExpiringIn( 10, ChronoUnit.SECONDS );
+        accessTokenRepository.setToken( expectedAccessToken );
         DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService(
             clock, accessTokenRepository, tokenRefresher,
             9
         );
+
+        OAuthAccessToken actualAccessToken = service.getToken();
+
+        assertThat( actualAccessToken )
+            .isSameAs( expectedAccessToken );
     }
 
     @Test
@@ -89,7 +96,7 @@ public class DefaultOAuthAccessTokenServiceTest {
         OAuthAccessToken refreshedToken = nonexpiredAccessToken();
         tokenRefresher
             .setRefreshToken( refreshedToken )
-            .forExpiredToken( tokenExpiringAtLookahead );
+            .forGivenToken( tokenExpiringAtLookahead );
         DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService(
             clock, accessTokenRepository, tokenRefresher,
             5
@@ -101,6 +108,7 @@ public class DefaultOAuthAccessTokenServiceTest {
             .isSameAs( refreshedToken );
         assertThat( accessTokenRepository.getToken() )
             .containsSame( refreshedToken );
+        // TODO Make sure old token is no longer in repository
     }
 
     @Test
@@ -110,7 +118,7 @@ public class DefaultOAuthAccessTokenServiceTest {
         OAuthAccessToken refreshedToken = nonexpiredAccessToken();
         tokenRefresher
             .setRefreshToken( refreshedToken )
-            .forExpiredToken( tokenExpiringBeforeLookahead );
+            .forGivenToken( tokenExpiringBeforeLookahead );
         DefaultOAuthAccessTokenService service = new DefaultOAuthAccessTokenService(
             clock, accessTokenRepository, tokenRefresher,
             8
@@ -122,6 +130,33 @@ public class DefaultOAuthAccessTokenServiceTest {
             .isSameAs( refreshedToken );
         assertThat( accessTokenRepository.getToken() )
             .containsSame( refreshedToken );
+        // TODO Make sure old token is no longer in repository
+    }
+
+    @Test
+    public void refreshingNonExistentTokenThrowsException() {
+        accessTokenRepository.clearTokens();
+
+        assertThatThrownBy( service::refreshToken )
+            .isInstanceOf( NoSuchAccessTokenException.class );
+    }
+
+    @Test
+    public void refreshingTokenDelegatesToRefresherAndUpdatesTokenInRepository() {
+        OAuthAccessToken tokenToBeRefreshed = nonexpiredAccessToken();
+        accessTokenRepository.setToken( tokenToBeRefreshed );
+        OAuthAccessToken expectedRefreshedToken = nonexpiredAccessToken();
+        tokenRefresher
+            .setRefreshToken( expectedRefreshedToken )
+            .forGivenToken( tokenToBeRefreshed );
+
+        OAuthAccessToken actualRefreshedToken = service.refreshToken();
+
+        assertThat( actualRefreshedToken )
+            .isSameAs( expectedRefreshedToken );
+        assertThat( accessTokenRepository.getToken() )
+            .containsSame( expectedRefreshedToken );
+        // TODO Make sure old token is no longer in repository
     }
 
     private OAuthAccessToken nonexpiredAccessToken() {

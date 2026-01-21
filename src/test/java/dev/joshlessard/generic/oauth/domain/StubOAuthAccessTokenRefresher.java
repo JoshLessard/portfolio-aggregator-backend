@@ -20,6 +20,6 @@ public class StubOAuthAccessTokenRefresher implements OAuthAccessTokenRefresher 
 
     public interface SetRefreshTokenFluent {
 
-        void forExpiredToken( OAuthAccessToken expiredToken );
+        void forGivenToken( OAuthAccessToken expiredToken );
     }
 }

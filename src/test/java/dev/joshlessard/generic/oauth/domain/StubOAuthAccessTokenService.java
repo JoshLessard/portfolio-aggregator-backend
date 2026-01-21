@@ -13,6 +13,11 @@ public class StubOAuthAccessTokenService implements OAuthAccessTokenService {
             .orElseThrow( NoSuchAccessTokenException::new );
     }
 
+    @Override
+    public OAuthAccessToken refreshToken() {
+        throw new UnsupportedOperationException();
+    }
+
     public void setToken( OAuthAccessToken accessToken ) {
         this.accessToken = accessToken;
     }
