@@ -8,16 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import dev.joshlessard.generic.oauth.domain.OAuthAccessToken;
 import dev.joshlessard.portfolio.domain.Portfolio;
+import dev.joshlessard.portfolio.domain.PortfolioAccessException;
+import dev.joshlessard.portfolio.domain.PortfolioException;
+import dev.joshlessard.portfolio.domain.PortfolioRetriever;
 import dev.joshlessard.portfolio.domain.PortfolioType;
 import dev.joshlessard.portfolio.domain.Position;
-import dev.joshlessard.portfolio.domain.PortfolioRetriever;
 
 // TODO Handle invalid token (e.g., if it is rejected by any APIs)
+// TODO Am I mixing concepts here?  e.g., should I be translating OAuthAccessToken into a model that belongs to this domain?
 @Component
 public class QuestradePortfolioRetriever implements PortfolioRetriever {
 
@@ -72,11 +77,22 @@ public class QuestradePortfolioRetriever implements PortfolioRetriever {
     private <T> T get( OAuthAccessToken accessToken, String uri, Class<T> responseType ) {
         String apiServer = accessToken.additionalParameters().get( "api_server" );
         String authorization = accessToken.tokenType() + " " + accessToken.accessToken();
-        return restClient
-            .get()
-            .uri( apiServer + uri )
-            .header( "Authorization", authorization )
-            .retrieve()
-            .body( responseType );
+        try {
+            return restClient
+                .get()
+                .uri( apiServer + uri )
+                .header( "Authorization", authorization )
+                .retrieve()
+                .body( responseType );
+        } catch ( RestClientResponseException e ) {
+            throw exceptionFor( e.getStatusCode() );
+        }
+    }
+
+    private PortfolioException exceptionFor( HttpStatusCode statusCode ) {
+        return switch ( statusCode.value() ) {
+            case 401 -> new PortfolioAccessException();
+            default -> new PortfolioException(); // TODO What should the client do about this?
+        };
     }
 }
