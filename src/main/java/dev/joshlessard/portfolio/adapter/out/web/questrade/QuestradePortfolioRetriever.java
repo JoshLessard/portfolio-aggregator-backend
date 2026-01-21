@@ -21,7 +21,6 @@ import dev.joshlessard.portfolio.domain.PortfolioRetriever;
 import dev.joshlessard.portfolio.domain.PortfolioType;
 import dev.joshlessard.portfolio.domain.Position;
 
-// TODO Handle invalid token (e.g., if it is rejected by any APIs)
 // TODO Am I mixing concepts here?  e.g., should I be translating OAuthAccessToken into a model that belongs to this domain?
 @Component
 public class QuestradePortfolioRetriever implements PortfolioRetriever {

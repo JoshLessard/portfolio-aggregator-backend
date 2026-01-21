@@ -18,6 +18,12 @@ public class DefaultPortfolioService implements PortfolioService {
     @Override
     public List<Portfolio> getPortfolios() {
         OAuthAccessToken accessToken = accessTokenService.getToken();
-        return portfolioRetriever.retrievePortfolios( accessToken );
+        try {
+            return portfolioRetriever.retrievePortfolios( accessToken );
+        } catch ( PortfolioAccessException e ) {
+            accessToken = accessTokenService.refreshToken();
+            return portfolioRetriever.retrievePortfolios( accessToken );
+            // TODO What if this fails?
+        }
     }
 }

@@ -31,4 +31,24 @@ public class DefaultPortfolioServiceTest {
         assertThat( actualPortfolios )
             .containsExactlyInAnyOrderElementsOf( expectedPortfolios );
     }
+
+    @Test
+    public void whenAccessExceptionDuringPortfolioRetrievalThenRetryWithRefreshedAccessToken() {
+        OAuthAccessToken invalidToken = new OAuthAccessToken( "some_invalid_token", "invalid_type", Instant.now(), "refresh_me?", emptyMap() );
+        accessTokenService.setToken( invalidToken );
+        portfolioRetriever.throwAccessExceptionFor( invalidToken );
+        OAuthAccessToken validRefreshedToken = new OAuthAccessToken( "valid_refreshed_token", "valid_type", Instant.now(), "dont_need_this", emptyMap() );
+        accessTokenService
+            .setRefreshToken( validRefreshedToken )
+            .forGivenToken( invalidToken );
+        List<Portfolio> expectedPortfolios = List.of(
+            new Portfolio( PortfolioType.RRSP, List.of( new Position( "XGRO", 17.214 ) ) )
+        );
+        portfolioRetriever.setPortfolios( validRefreshedToken, expectedPortfolios );
+
+        List<Portfolio> actualPortfolios = portfolioService.getPortfolios();
+
+        assertThat( actualPortfolios )
+            .containsExactlyInAnyOrderElementsOf( expectedPortfolios );
+    }
 }
